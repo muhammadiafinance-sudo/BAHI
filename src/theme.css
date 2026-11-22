@@ -406,3 +406,16 @@ html body #loginScreen .nl-links button:disabled{color:var(--nl-faint)!important
   #loginScreen *,#bankApp *,#shopApp,#shopApp *,#nlTip{animation:none!important;transition:none!important}
   #shopApp .sp-side{transition:none!important}
 }
+
+/* ---------- bigger text in boxes and tables (whole app) ---------- */
+#bankApp table,#shopApp table{font-size:17px}
+#bankApp th,#shopApp th{font-size:13px}
+#bankApp td,#shopApp td{padding-top:11px;padding-bottom:11px}
+#bankApp .kv{font-size:16px}
+#bankApp .rm-f input,#bankApp .rm-f select,#bankApp .rm-f textarea,#bankApp .rm-search input{font-size:18px;height:46px}
+#bankApp .rm-f textarea{height:auto}
+#bankApp .rm-f label{font-size:13.5px}
+#bankApp .rm-item b{font-size:16px}#bankApp .rm-item .a{font-size:16px}
+#bankApp .bkd-ctl input[type=date],#shopApp .sp-ctl input[type=date]{font-size:16px}
+html body #loginScreen .nl-pw input{font-size:18px}
+@media(max-width:640px){#bankApp table,#shopApp table{font-size:15.5px}}
