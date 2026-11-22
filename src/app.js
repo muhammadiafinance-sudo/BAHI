@@ -178,3 +178,128 @@ async function startHisabApp() {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 }
+
+/* ============================================================
+   MOTION — staggered entrances, chart bar indexes, line drawing
+   and a dark chart tooltip. Only sets classes / CSS variables;
+   all animation runs in CSS on transform + opacity.
+   ============================================================ */
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CARD = '.bkk,.bkp,.bkday,.bkoops,.fm-card,.rm-card,.rm-item,.bkd-one,.bk-greet,.bksec';
+  var lastRun = new WeakMap();
+
+  function stagger(list, cap) {
+    var k = 0;
+    list.forEach(function (el) {
+      el.classList.remove('nl-in');
+      el.style.setProperty('--i', Math.min(k++, cap || 14));
+    });
+    if (list.length) void list[0].offsetWidth;            // one reflow per batch, not per element
+    list.forEach(function (el) { el.classList.add('nl-in'); });
+  }
+  function prepChart(svg) {
+    var bars = 0, dots = 0, lv = 0;
+    [].forEach.call(svg.querySelectorAll('path'), function (p) {
+      var f = p.getAttribute('fill');
+      if (f === 'none') { try { p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 1); } catch (e) {} }
+      else if (f && f.indexOf('url') !== 0) p.style.setProperty('--i', Math.floor(bars++ / 2));
+    });
+    [].forEach.call(svg.querySelectorAll('circle'), function (c) { c.style.setProperty('--i', dots++); });
+    [].forEach.call(svg.querySelectorAll('text.lv'), function (t) { t.style.setProperty('--i', lv++); });
+  }
+  function handle(nodes) {
+    var cards = [], rows = [], now = Date.now();
+    nodes.forEach(function (n) {
+      if (n.nodeType !== 1) return;
+      var p = n.parentNode;
+      if (p && now - (lastRun.get(p) || 0) < 700) return;  // fast re-renders (typing, live sync) stay still
+      if (p) lastRun.set(p, now);
+      if (n.matches('svg.ch')) prepChart(n);
+      [].forEach.call(n.querySelectorAll('svg.ch'), prepChart);
+      if (n.matches(CARD)) cards.push(n);
+      [].push.apply(cards, n.querySelectorAll(CARD));
+      if (n.matches('tbody tr')) rows.push(n);
+      [].push.apply(rows, n.querySelectorAll('tbody tr'));
+    });
+    if (cards.length) stagger(cards, 14);
+    if (rows.length) stagger(rows.slice(0, 24), 24);
+  }
+
+  function animateView(view) {
+    if (!view || reduce) return;
+    stagger([].slice.call(view.querySelectorAll(CARD)).filter(function (el) { return el.offsetParent; }), 14);
+    [].forEach.call(view.querySelectorAll('svg.ch'), prepChart);   // re-shown views replay their CSS animations
+  }
+
+  function init() {
+    var app = document.getElementById('bankApp');
+    if (!app || reduce || !window.MutationObserver) return;
+    var queue = [], raf = 0;
+    new MutationObserver(function (muts) {
+      muts.forEach(function (m) { [].push.apply(queue, m.addedNodes); });
+      if (!raf) raf = requestAnimationFrame(function () { raf = 0; var q = queue; queue = []; handle(q); });
+    }).observe(app, { childList: true, subtree: true });
+
+    // replay the entrance whenever a section is opened from the sidebar
+    var orig = window.bankTab;
+    if (typeof orig === 'function') window.bankTab = function () {
+      var r = orig.apply(this, arguments);
+      requestAnimationFrame(function () {
+        var v = [].filter.call(app.querySelectorAll('.bk-view'), function (x) { return x.style.display !== 'none'; })[0];
+        animateView(v);
+      });
+      return r;
+    };
+    var show = window.showBankApp;
+    if (typeof show === 'function') window.showBankApp = function () {
+      var r = show.apply(this, arguments);
+      requestAnimationFrame(function () { animateView(document.getElementById('bkViewDash')); });
+      return r;
+    };
+    initTip(app);
+  }
+
+  // dark tooltip for the chart hit areas (replaces the browser's plain title box)
+  function initTip(app) {
+    var tip = document.createElement('div'); tip.id = 'nlTip'; tip.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tip);
+    var cur = null, x = 0, y = 0, raf = 0;
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function build(text) {
+      var i = text.indexOf(' — '), head = i > 0 ? text.slice(0, i) : '', body = i > 0 ? text.slice(i + 3) : text;
+      var html = head ? '<div class="h">' + esc(head) + '</div>' : '';
+      body.split(' · ').forEach(function (part) {
+        var m = part.match(/^(.*?)\s+([-+]?৳?[\d.,]+[kKmM]?%?)$/), cls = /deposit/i.test(part) ? 't-dep' : /withdraw/i.test(part) ? 't-wd' : /commission/i.test(part) ? 't-com' : '';
+        html += m ? '<div class="r ' + cls + '"><span><i></i>' + esc(m[1]) + '</span><b>' + esc(m[2]) + '</b></div>'
+                  : '<div class="r"><span>' + esc(part) + '</span></div>';
+      });
+      return html;
+    }
+    function place() {
+      raf = 0;
+      var w = tip.offsetWidth, h = tip.offsetHeight, px = x + 16, py = y - h - 12;
+      if (px + w > innerWidth - 8) px = x - w - 16;
+      if (py < 8) py = y + 18;
+      tip.style.transform = 'translate3d(' + Math.round(px) + 'px,' + Math.round(py) + 'px,0)';
+    }
+    app.addEventListener('pointerover', function (e) {
+      var t = e.target.closest && e.target.closest('svg.ch .bkhit');
+      if (!t) return;
+      var ti = t.querySelector('title');
+      if (ti) { t.setAttribute('data-tip', ti.textContent); ti.remove(); }
+      var txt = t.getAttribute('data-tip'); if (!txt) return;
+      if (cur !== t) { cur = t; tip.innerHTML = build(txt); }
+      tip.classList.add('show');
+    });
+    app.addEventListener('pointermove', function (e) {
+      if (!cur) return; x = e.clientX; y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(place);
+    }, { passive: true });
+    function hide() { cur = null; tip.classList.remove('show'); }
+    app.addEventListener('pointerout', function (e) { if (cur && (!e.relatedTarget || !cur.contains(e.relatedTarget))) hide(); });
+    app.addEventListener('scroll', hide, true);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 0);
+})();

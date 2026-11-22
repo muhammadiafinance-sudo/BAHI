@@ -63,7 +63,7 @@ bank = between('<div id="bankApp"', '\n<script>\n/* ====', include_end=False)
 login = open(os.path.join(HERE, 'src', 'login.html'), encoding='utf-8').read()
 
 # new look: the default "ocean" colour theme is teal here
-bank = bank.replace('#0a2f6b 55%,#082756 55%', '#0f766e 55%,#134e4a 55%').replace('>Ocean Blue<', '>Ocean Teal<')
+bank = bank.replace('#0a2f6b 55%,#082756 55%', '#1f4a37 55%,#16352a 55%').replace('>Ocean Blue<', '>Forest Green<')
 
 # ---- scripts (copied as-is) ----
 bijoy = block('script', 'bijoyLib')
@@ -96,9 +96,9 @@ html = '\n'.join([
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
     '<title>Mohammadia Hisab</title>',
-    '<meta name="theme-color" content="#0f766e">',
+    '<meta name="theme-color" content="#1f4a37">',
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-    '<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">',
+    '<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">',
     '<link rel="manifest" href="manifest.webmanifest">',
     '<link rel="icon" href="icon-192.png">',
     '<link rel="apple-touch-icon" href="icon-192.png">',
