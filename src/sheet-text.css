@@ -6,3 +6,40 @@ html body table.ledger.pin-tbl td input.amount-input,html body table.ledger.pin-
 html body table.ledger td.note-cell input,html body table.ledger td.note-cell input.fixed-note{font-size:18px!important}
 html body table.ledger td.num{font-size:13px!important}
 html body table.ledger td textarea{min-height:34px}
+
+/* ---- columns grow with the numbers (shop Daily Hisab; sheet-fit.js adds html.sf-fit) ---- */
+html.sf-fit body table.ledger{table-layout:fixed}
+html.sf-fit body table.ledger td.num{width:36px}
+html.sf-fit body table.ledger td:has(> .amount-input){width:max(var(--amtw,0px),84px)}
+html.sf-fit body table.ledger td.note-cell{width:max(var(--notew,0px),90px)}
+html.sf-fit body table.ledger td .amount-input,html.sf-fit body table.ledger td .note-input{width:100%;min-width:0;text-overflow:clip}
+html.sf-fit body .ledger-grid{overflow-x:auto}
+
+/* ---- minimal, clean section heads: white, a coloured dot, a quiet total ---- */
+html body .panel[data-section] .panel-head:not(#z){background:#fff!important;border-bottom:1px solid #ecece7!important;box-shadow:none!important}
+html body .panel[data-section] .panel-head:not(#z) h3{color:#1c1f1d!important;font-weight:600!important;font-size:15px!important;display:flex;align-items:center;gap:9px}
+html body .panel[data-section] .panel-head:not(#z) h3::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--hc,#9a9f9b);flex:none}
+html body .panel[data-section] .panel-head:not(#z) h3 span{color:#9a9f9b!important}
+html body .panel[data-section] .panel-head:not(#z) .total{color:#1c1f1d!important;background:#f3f3ef!important;border-radius:999px!important;padding:3px 10px!important;font-family:'Lato','Calibri','Segoe UI',system-ui,sans-serif!important;font-size:15px!important;font-weight:600!important}
+
+/* ---- account names: plain dark text with a small colour dot (no coloured blocks) ---- */
+html body .panel[data-section="account"] table.ledger tbody tr td.num:not(#z){background:#fafaf8!important;color:#9a9f9b!important;font-weight:500!important;font-size:13px!important;border-right:1px solid #ecece7!important;border-bottom-color:#f0f0ec!important}
+html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z){position:relative;background:#fff!important;border-right:1px solid #f0f0ec!important;border-bottom-color:#f0f0ec!important}
+html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z) input{color:#1c1f1d!important;font-weight:500!important;background:transparent!important;caret-color:#1c1f1d;padding-left:28px!important}
+html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z)::before{content:"";position:absolute;left:11px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#c9cdc8;pointer-events:none}
+html body .panel[data-section="account"] table.ledger tbody tr:has(input.note-input:placeholder-shown) td.note-cell:not(#z)::before{background:transparent}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(1) td.note-cell:not(#z)::before{background:#2d6b4f}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(2) td.note-cell:not(#z)::before{background:#3b6fb6}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(3) td.note-cell:not(#z)::before{background:#b5653a}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(4) td.note-cell:not(#z)::before{background:#7a5cb8}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(5) td.note-cell:not(#z)::before{background:#2a8a8a}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(6) td.note-cell:not(#z)::before{background:#b8495d}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(7) td.note-cell:not(#z)::before{background:#b8860b}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(8) td.note-cell:not(#z)::before{background:#6b8e23}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(9) td.note-cell:not(#z)::before{background:#9b4d8a}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(10) td.note-cell:not(#z)::before{background:#5f7486}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(11) td.note-cell:not(#z)::before{background:#8a5a44}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(12) td.note-cell:not(#z)::before{background:#d07a2c}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(13) td.note-cell:not(#z)::before{background:#4a5bb0}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(14) td.note-cell:not(#z)::before{background:#2f8fb0}
+html body .panel[data-section="account"] table.ledger tbody tr:nth-child(15) td.note-cell:not(#z)::before{background:#8d6bb8}

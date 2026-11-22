@@ -77,12 +77,16 @@ hisab_js = script_containing('HISAB PAGES — "DBBL Daily Hisab" and "Daily Hisa
 bank_theme_js = block('script', 'bankThemeJs')
 
 # The shop Daily Hisab used to live inside the shop's Daily Cash page; here it is its own page.
-# Bigger, Excel-like cell text inside both hisab sheets (src/sheet-text.css)
+# Inside both hisab sheets: bigger Excel-like cell text, minimal heads/account names (src/sheet-text.css)
+# and columns that widen to fit their longest number (src/sheet-fit.js)
 _sheet_css = open(os.path.join(HERE, 'src', 'sheet-text.css'), encoding='utf-8').read()
 _mark = '<head><script>/* HISAB-CLOUD-BRIDGE'
 if hisab_js.count(_mark) != 2:
     sys.exit('build: hisab sheet <head> marker not found twice')
-hisab_js = hisab_js.replace(_mark, '<head><style id=\\"sheetText\\">' + json.dumps(_sheet_css)[1:-1].replace('</', '<\\/') + '</style><script>/* HISAB-CLOUD-BRIDGE')
+_sheet_js = open(os.path.join(HERE, 'src', 'sheet-fit.js'), encoding='utf-8').read()
+def _js_str(x):
+    return json.dumps(x)[1:-1].replace('</', '<\\/')
+hisab_js = hisab_js.replace(_mark, '<head><style id=\\"sheetText\\">' + _js_str(_sheet_css) + '</style><script id=\\"sheetFit\\">' + _js_str(_sheet_js) + '<\\/script><script>/* HISAB-CLOUD-BRIDGE')
 hisab_js = hisab_js.replace("if(id==='daily'){openDailyCash();cashTab('hisab');return}",
                             "if(id==='daily'){initFrame(id);return}")
 
