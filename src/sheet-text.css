@@ -9,9 +9,8 @@ html body table.ledger td textarea{min-height:34px}
 
 /* ---- columns grow with the numbers (shop Daily Hisab; sheet-fit.js adds html.sf-fit) ---- */
 html.sf-fit body table.ledger{table-layout:fixed}
-html.sf-fit body table.ledger td.num{width:36px}
-html.sf-fit body table.ledger td:has(> .amount-input){width:max(var(--amtw,0px),84px)}
-html.sf-fit body table.ledger td.note-cell{width:max(var(--notew,0px),90px)}
+html.sf-fit body table.ledger td.num{width:24px}
+html.sf-fit body table.ledger tr:has(> td.note-cell) > td:has(> .amount-input){width:max(var(--amtw,0px),84px)}
 html.sf-fit body table.ledger td .amount-input,html.sf-fit body table.ledger td .note-input{width:100%;min-width:0;text-overflow:clip}
 html.sf-fit body .ledger-grid{overflow-x:auto}
 
@@ -43,3 +42,6 @@ html body .panel[data-section="account"] table.ledger tbody tr:nth-child(12) td.
 html body .panel[data-section="account"] table.ledger tbody tr:nth-child(13) td.note-cell:not(#z)::before{background:#4a5bb0}
 html body .panel[data-section="account"] table.ledger tbody tr:nth-child(14) td.note-cell:not(#z)::before{background:#2f8fb0}
 html body .panel[data-section="account"] table.ledger tbody tr:nth-child(15) td.note-cell:not(#z)::before{background:#8d6bb8}
+
+/* ---- SL (serial number) column: as narrow as two digits ---- */
+html body table.ledger td.num:not(#z){width:24px;min-width:24px;max-width:24px;padding:0 1px!important;font-size:11.5px!important;text-align:center;letter-spacing:-.2px}
