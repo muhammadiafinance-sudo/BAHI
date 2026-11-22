@@ -5,7 +5,7 @@ A separate app with two logins, using its **own Firebase project**, so it has it
 | Login | Sees |
 |---|---|
 | **Bank** | The full Bank portal: dashboard, DBBL Daily Hisab, remittance and bank forms. It's the same as in the shop app. |
-| **Shop** | Only the shop **Daily Hisab** sheet |
+| **Shop** | Dashboard, the shop **Daily Hisab** sheet, and the **Shopon** / **Modina** partner hisab |
 
 The shop app (repo `mohammadia-app`) is not changed by this app. This app starts with empty data, because it uses a different project.
 
@@ -42,3 +42,7 @@ python3 build.py path/to/mohammadia-app/index.html
 ```
 
 This regenerates `index.html` here; the shop app's file is only read. To change this app's own parts, edit `src/app.js`, `src/app.css`, `src/shop.html` or `config.js`, never the generated `index.html` by hand.
+
+## Shopon & Modina (Shop login)
+
+The Shopon and Modina pages are the SM partner hisab (`src/sm.html`, a copy of `date-app/hisab/index.html`). Inside this app it saves to this project's Firestore (`sm_months`, one doc per month, and `sm_config/main`), so `firestore.rules` must include those two collections. To bring old SM data over: in the old SM app use **Settings & backup → Backup**, then here open Shopon → **Settings & backup → Restore**.

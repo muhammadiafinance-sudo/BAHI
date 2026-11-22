@@ -120,7 +120,7 @@ function showShopHisab() {
   document.body.classList.remove('booting');
   $('shopApp').classList.add('show');
   hideBootOverlay();
-  if (window.initHisabFrame) window.initHisabFrame('daily');   // starts the hisab_daily cloud store
+  if (window.startShopApp) window.startShopApp();               // dashboard · Daily Hisab · Shopon · Modina
 }
 
 function enterApp(role, animate) {
@@ -186,7 +186,7 @@ if ('serviceWorker' in navigator) {
    ============================================================ */
 (function () {
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var CARD = '.bkk,.bkp,.bkday,.bkoops,.fm-card,.rm-card,.rm-item,.bkd-one,.bk-greet,.bksec';
+  var CARD = '.bkk,.bkp,.bkday,.bkoops,.fm-card,.rm-card,.rm-item,.bkd-one,.bk-greet,.bksec,.sp-kpi,.sp-card,.sp-pc,.sp-ctl,.sp-greet,.sp-sec';
   var lastRun = new WeakMap();
 
   function stagger(list, cap) {
@@ -232,14 +232,18 @@ if ('serviceWorker' in navigator) {
     [].forEach.call(view.querySelectorAll('svg.ch'), prepChart);   // re-shown views replay their CSS animations
   }
 
+  window.nlReplay = animateView;
   function init() {
-    var app = document.getElementById('bankApp');
-    if (!app || reduce || !window.MutationObserver) return;
+    var app = document.getElementById('bankApp'), shop = document.getElementById('shopApp');
+    if (reduce || !window.MutationObserver) return;
     var queue = [], raf = 0;
-    new MutationObserver(function (muts) {
+    var mo = new MutationObserver(function (muts) {
       muts.forEach(function (m) { [].push.apply(queue, m.addedNodes); });
       if (!raf) raf = requestAnimationFrame(function () { raf = 0; var q = queue; queue = []; handle(q); });
-    }).observe(app, { childList: true, subtree: true });
+    });
+    if (shop) { mo.observe(shop, { childList: true, subtree: true }); initTip(shop); }
+    if (!app) return;
+    mo.observe(app, { childList: true, subtree: true });
 
     // replay the entrance whenever a section is opened from the sidebar
     var orig = window.bankTab;
@@ -261,16 +265,16 @@ if ('serviceWorker' in navigator) {
   }
 
   // dark tooltip for the chart hit areas (replaces the browser's plain title box)
+  var tip = null;
   function initTip(app) {
-    var tip = document.createElement('div'); tip.id = 'nlTip'; tip.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(tip);
+    if (!tip) { tip = document.createElement('div'); tip.id = 'nlTip'; tip.setAttribute('aria-hidden', 'true'); document.body.appendChild(tip); }
     var cur = null, x = 0, y = 0, raf = 0;
     function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
     function build(text) {
       var i = text.indexOf(' — '), head = i > 0 ? text.slice(0, i) : '', body = i > 0 ? text.slice(i + 3) : text;
       var html = head ? '<div class="h">' + esc(head) + '</div>' : '';
       body.split(' · ').forEach(function (part) {
-        var m = part.match(/^(.*?)\s+([-+]?৳?[\d.,]+[kKmM]?%?)$/), cls = /deposit/i.test(part) ? 't-dep' : /withdraw/i.test(part) ? 't-wd' : /commission/i.test(part) ? 't-com' : '';
+        var m = part.match(/^(.*?)\s+([-+]?৳?[\d.,]+[kKmM]?%?)$/), cls = /deposit|profit|shopon/i.test(part) ? 't-dep' : /withdraw|cost/i.test(part) ? 't-wd' : /commission/i.test(part) ? 't-com' : /modina/i.test(part) ? 't-mod' : '';
         html += m ? '<div class="r ' + cls + '"><span><i></i>' + esc(m[1]) + '</span><b>' + esc(m[2]) + '</b></div>'
                   : '<div class="r"><span>' + esc(part) + '</span></div>';
       });

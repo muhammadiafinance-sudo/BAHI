@@ -1,0 +1,42 @@
+<script>/* SM-EMBED: inside the Mohammadia Hisab app, SM keeps its data in this app's Firebase
+   (collections sm_months and sm_config) and the app's own sidebar replaces SM's. */
+(function(){
+  var P=null;try{P=window.parent!==window&&window.parent.__smBridge}catch(e){}
+  if(!P)return;
+  document.documentElement.classList.add('sm-embed');
+  window.claude={use:function(n){return P.use(n)}};
+  window.__smApi={
+    partners:function(){try{return state.partners.slice()}catch(e){return[]}},
+    totals:function(p){try{return totals(p)}catch(e){return null}},
+    entries:function(){try{return state.entries}catch(e){return[]}},
+    loaded:function(){try{return loaded}catch(e){return false}}
+  };
+  addEventListener('load',function(){
+    var r=window.render;
+    if(typeof r==='function')window.render=function(){var x=r.apply(this,arguments);try{P.changed()}catch(e){}return x};
+    try{P.changed()}catch(e){}
+  });
+})();</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style id="smEmbedCss">
+html.sm-embed{
+  --bg:#fbfbf9;--surface:#ffffff;--raised:#f6f6f3;--ink:#1c1f1d;--muted:#6b706c;--line:#e7e7e2;
+  --brand:#1f4a37;--brand-2:#16352a;--brand-soft:#eef2ec;--brand-grad:linear-gradient(135deg,#25573f 0%,#16352a 100%);
+  --day-a:#ffffff;--day-b:#f6f6f3;--day-line:#e7e7e2;--chip:#f1f1ed;
+  --shadow:0 1px 2px rgba(28,31,29,.04),0 0 0 1px #e7e7e2;
+  --font:"Geist","Hind Siliguri",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+html.sm-embed body{-webkit-font-smoothing:antialiased}
+html.sm-embed header,html.sm-embed #side,html.sm-embed #scrim{display:none!important}
+html.sm-embed .shell{display:flex!important}
+html.sm-embed .shell>main{padding-left:20px!important;padding-right:20px!important}
+html.sm-embed .composer{left:0!important}
+html.sm-embed .composer #selBar{padding-left:20px!important}
+@media(max-width:640px){html.sm-embed .shell>main{padding-left:10px!important;padding-right:10px!important}}
+@keyframes smRise{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+html.sm-embed #hero,html.sm-embed .pleft{animation:smRise .5s cubic-bezier(.22,.8,.24,1) both}
+html.sm-embed .pleft{animation-delay:.06s}
+html.sm-embed .tab{border-radius:9px;font-weight:600}
+@media (prefers-reduced-motion:reduce){html.sm-embed *{animation:none!important;transition:none!important}}
+</style>

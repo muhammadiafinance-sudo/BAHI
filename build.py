@@ -13,7 +13,7 @@ so improvements made there can be brought over by running this script again:
 (default source: ../index.html). The shop app's file is only READ, never changed. Edit the Firebase config in
 hisab-app/config.js (not in the generated index.html).
 """
-import os, re, sys
+import json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', 'index.html')
@@ -88,6 +88,16 @@ glue_css = open(os.path.join(HERE, 'src', 'app.css'), encoding='utf-8').read()
 glue_html = open(os.path.join(HERE, 'src', 'shop.html'), encoding='utf-8').read()
 glue_js = open(os.path.join(HERE, 'src', 'app.js'), encoding='utf-8').read()
 theme_css = open(os.path.join(HERE, 'src', 'theme.css'), encoding='utf-8').read()
+shop_js = open(os.path.join(HERE, 'src', 'shop.js'), encoding='utf-8').read()
+
+# Shopon / Modina: the SM partner hisab (src/sm.html, a copy of date-app/hisab/index.html),
+# shown in an iframe with src/sm-embed.html added at the top of its <head>.
+sm_src = open(os.path.join(HERE, 'src', 'sm.html'), encoding='utf-8').read()
+sm_embed = open(os.path.join(HERE, 'src', 'sm-embed.html'), encoding='utf-8').read()
+if '<head>' not in sm_src:
+    sys.exit('build: src/sm.html has no <head>')
+sm_src = sm_src.replace('<head>', '<head>\n' + sm_embed, 1)
+sm_js = '<script id="smSrc">window.SM_SRC=' + json.dumps(sm_src).replace('</', '<\\/') + ';</script>'
 
 html = '\n'.join([
     '<!DOCTYPE html>',
@@ -120,6 +130,8 @@ html = '\n'.join([
     bijoy,
     bank_js,
     hisab_js,
+    sm_js,
+    '<script id="shopJs">', shop_js, '</script>',
     bank_theme_js,
     '<script>startHisabApp();</script>',
     '</body>',
