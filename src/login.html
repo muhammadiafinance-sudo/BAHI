@@ -1,0 +1,55 @@
+<div id="loginScreen" class="nl">
+  <aside class="nl-hero" aria-hidden="true">
+    <div class="nl-brand">
+      <span class="nl-logo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9l8-5 8 5v10"/><path d="M9 19v-5h6v5"/><path d="M3 19h18"/></svg></span>
+      <span class="nl-bname">Mohammadia <b>Hisab</b></span>
+    </div>
+    <div class="nl-pitch">
+      <h2>Every taka,<br>counted and safe.</h2>
+      <p>Daily hisab for the shop and the bank booth, saved to the cloud one day at a time.</p>
+      <ul class="nl-feats">
+        <li><i><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18"/></svg></i><span><b>Bank</b>DBBL hisab, dashboard, remittance and forms</span></li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M10 20v-5h4v5"/></svg></i><span><b>Shop</b>The daily hisab sheet, nothing else</span></li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.3 8-8 9-4.7-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></i><span><b>Private</b>Each login sees only its own data</span></li>
+      </ul>
+    </div>
+    <div class="nl-hero-foot">&copy; 2026 Mohammadia Library &amp; Computer</div>
+    <span class="nl-orb o1"></span><span class="nl-orb o2"></span>
+  </aside>
+
+  <main class="nl-main">
+    <section class="nl-card" aria-labelledby="bkTitle">
+      <div class="nl-mobile-brand"><span class="nl-logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9l8-5 8 5v10"/><path d="M9 19v-5h6v5"/><path d="M3 19h18"/></svg></span>Mohammadia <b>Hisab</b></div>
+      <h1 class="nl-title" id="bkTitle">Welcome back</h1>
+      <p class="nl-sub">Choose your account, then enter its password.</p>
+
+      <div class="nl-roles" role="tablist" aria-label="Account type">
+        <button type="button" class="nl-role active" id="roleBtnEmployee" role="tab" aria-selected="true" onclick="selectLoginRole('employee')">
+          <span class="nl-ric"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18"/></svg></span>
+          <span class="nl-rt">Bank</span>
+          <span class="nl-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>
+        </button>
+        <button type="button" class="nl-role" id="roleBtnAdmin" role="tab" aria-selected="false" onclick="selectLoginRole('admin')">
+          <span class="nl-ric"><svg viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M10 20v-5h4v5"/></svg></span>
+          <span class="nl-rt">Shop</span>
+          <span class="nl-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>
+        </button>
+      </div>
+      <p class="nl-rdesc" id="bkRoleDesc">DBBL daily hisab &amp; bank dashboard.</p>
+
+      <label class="nl-label" for="loginPassword">Password</label>
+      <div class="nl-pw">
+        <svg class="nl-pw-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button type="button" class="nl-eye" onclick="toggleLoginPw()" id="pwToggleBtn" aria-label="Show or hide password">&#128065;</button>
+      </div>
+
+      <button type="button" class="nl-go" id="loginBtn" onclick="doLogin()"><span id="loginBtnText">Sign In</span><span class="nl-spin" id="loginSpinner"></span><svg class="nl-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <div class="nl-error" id="loginError" role="alert"></div>
+      <div class="nl-links"><button type="button" id="forgotBtn" onclick="forgotPassword()">Forgot password?</button></div>
+      <div id="forgotMsg" class="nl-msg" style="display:none"></div>
+      <div id="authCloudStatus" style="display:none" aria-hidden="true"></div>
+    </section>
+    <p class="nl-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Authorised users only · encrypted connection</p>
+  </main>
+</div>
