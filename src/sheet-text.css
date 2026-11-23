@@ -22,27 +22,12 @@ html body .panel[data-section] .panel-head:not(#z) h3 span{color:#9a9f9b!importa
 html body .panel[data-section] .panel-head:not(#z){display:flex;flex-wrap:wrap;align-items:center;align-content:center;gap:3px 8px;min-height:66px;box-sizing:border-box;padding-top:8px!important;padding-bottom:8px!important}
 html body .panel[data-section] .panel-head:not(#z) .total{flex:none;margin-left:auto;color:#1c1f1d!important;background:#f3f3ef!important;border-radius:999px!important;padding:3px 10px!important;font-family:'Lato','Calibri','Segoe UI',system-ui,sans-serif!important;font-size:15px!important;font-weight:600!important}
 
-/* ---- account names: plain dark text with a small colour dot (no coloured blocks) ---- */
-html body .panel[data-section="account"] table.ledger tbody tr td.num:not(#z){background:#fafaf8!important;color:#9a9f9b!important;font-weight:500!important;font-size:13px!important;border-right:1px solid #ecece7!important;border-bottom-color:#f0f0ec!important}
-html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z){position:relative;background:#fff!important;border-right:1px solid #f0f0ec!important;border-bottom-color:#f0f0ec!important}
-html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z) input{color:#1c1f1d!important;font-weight:500!important;background:transparent!important;caret-color:#1c1f1d;padding-left:28px!important}
-html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z)::before{content:"";position:absolute;left:11px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#c9cdc8;pointer-events:none}
-html body .panel[data-section="account"] table.ledger tbody tr:has(input.note-input:placeholder-shown) td.note-cell:not(#z)::before{background:transparent}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(1) td.note-cell:not(#z)::before{background:#2d6b4f}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(2) td.note-cell:not(#z)::before{background:#3b6fb6}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(3) td.note-cell:not(#z)::before{background:#b5653a}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(4) td.note-cell:not(#z)::before{background:#7a5cb8}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(5) td.note-cell:not(#z)::before{background:#2a8a8a}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(6) td.note-cell:not(#z)::before{background:#b8495d}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(7) td.note-cell:not(#z)::before{background:#b8860b}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(8) td.note-cell:not(#z)::before{background:#6b8e23}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(9) td.note-cell:not(#z)::before{background:#9b4d8a}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(10) td.note-cell:not(#z)::before{background:#5f7486}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(11) td.note-cell:not(#z)::before{background:#8a5a44}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(12) td.note-cell:not(#z)::before{background:#d07a2c}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(13) td.note-cell:not(#z)::before{background:#4a5bb0}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(14) td.note-cell:not(#z)::before{background:#2f8fb0}
-html body .panel[data-section="account"] table.ledger tbody tr:nth-child(15) td.note-cell:not(#z)::before{background:#8d6bb8}
+/* ---- account names: highlighted like an Excel fill (soft green, grid lines, dark text) ---- */
+html body .panel[data-section="account"] table.ledger tbody tr td.num:not(#z){background:#f2f2f2!important;color:#7f7f7f!important;font-weight:500!important;border-right:1px solid #d9d9d9!important;border-bottom:1px solid #d9d9d9!important}
+html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z){background:#e2efda!important;border-right:1px solid #c6dbb8!important;border-bottom:1px solid #c6dbb8!important}
+html body .panel[data-section="account"] table.ledger tbody tr td.note-cell:not(#z) input{color:#1c1f1d!important;font-weight:600!important;background:transparent!important;caret-color:#1c1f1d;padding-left:10px!important}
+html body .panel[data-section="account"] table.ledger tbody tr:hover td.note-cell:not(#z){background:#d4e8c6!important}
+html body .panel[data-section="account"] table.ledger tbody tr:has(input:focus) td.note-cell:not(#z){background:#c6e0b4!important}
 
 /* ---- SL (serial number) column: as narrow as two digits ---- */
 html body table.ledger td.num:not(#z){width:24px;min-width:24px;max-width:24px;padding:0 1px!important;font-size:11.5px!important;text-align:center;letter-spacing:-.2px}
