@@ -7,8 +7,8 @@ Each edit must match exactly once, so a change in the shop app is reported inste
 import json
 
 EDITS = [
-    # Add scrolls exactly like Shopon and Modina: 50 rows, 22 shown, more rows (and scrolling)
-    # appear only once entries go past row 22.
+    # Add works like Shopon and Modina: 50 rows, at least 22 rows in the box, one spare empty row
+    # appears after the last entry once entries go past row 22.
     ("{key:'add',        label:'Add',            flow:'out',     placement:'ledger', col:2, note:true,  count:44, notePH:'Note', amtPH:'0', scrollRows:20},",
      "{key:'add',        label:'Add',            flow:'out',     placement:'ledger', col:2, note:true,  count:50, notePH:'Note', amtPH:'0', scrollRows:22},"),
     ("""    if(sec.key === 'add'){                       // Add (top) + Commission (below) together are as tall as Modina
@@ -22,6 +22,21 @@ EDITS = [
 """, ""),
     ("    const minRows = sec.key === 'add' ? 20 : sec.scrollRows;   // Add always holds 20 rows inside its scroll block\n",
      "    const minRows = sec.scrollRows;\n"),
+    # ...but the Add box is only as tall as the room left above Commission, so Commission's bottom lines up
+    # exactly with the bottom of Modina (and the other columns). Applies when Add and Modina share a row.
+    ("""    wrap.style.maxHeight = (scrolling && rowH) ? (rowH * sec.scrollRows) + 'px' : '';
+  });""",
+     """    wrap.style.maxHeight = (scrolling && rowH) ? (rowH * sec.scrollRows) + 'px' : '';
+    if(sec.key === 'add'){
+      const mp = document.querySelector('.panel[data-section="modina"]'), cp = document.querySelector('.panel[data-section="commission"]');
+      if(mp && cp && mp.offsetHeight > 0 && Math.abs(mp.getBoundingClientRect().top - panel.getBoundingClientRect().top) < 4){
+        const gap = parseFloat(getComputedStyle(panel.parentElement).rowGap) || 0;
+        const below = panel.getBoundingClientRect().bottom - wrap.getBoundingClientRect().bottom;
+        const room = Math.floor(mp.getBoundingClientRect().bottom - gap - cp.offsetHeight - below - wrap.getBoundingClientRect().top);
+        if(room > 60){ wrap.style.maxHeight = room + 'px'; wrap.classList.toggle('scrolling', wrap.scrollHeight > room + 1); }
+      }
+    }
+  });"""),
 ]
 
 

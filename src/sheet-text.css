@@ -16,10 +16,11 @@ html.sf-fit body .ledger-grid{overflow-x:auto}
 
 /* ---- minimal, clean section heads: white, a coloured dot, a quiet total ---- */
 html body .panel[data-section] .panel-head:not(#z){background:#fff!important;border-bottom:1px solid #ecece7!important;box-shadow:none!important}
-html body .panel[data-section] .panel-head:not(#z) h3{color:#1c1f1d!important;font-weight:600!important;font-size:15px!important;display:flex;align-items:center;gap:9px}
+html body .panel[data-section] .panel-head:not(#z) h3{white-space:nowrap;color:#1c1f1d!important;font-weight:600!important;font-size:15px!important;display:flex;align-items:center;gap:9px}
 html body .panel[data-section] .panel-head:not(#z) h3::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--hc,#9a9f9b);flex:none}
 html body .panel[data-section] .panel-head:not(#z) h3 span{color:#9a9f9b!important}
-html body .panel[data-section] .panel-head:not(#z) .total{color:#1c1f1d!important;background:#f3f3ef!important;border-radius:999px!important;padding:3px 10px!important;font-family:'Lato','Calibri','Segoe UI',system-ui,sans-serif!important;font-size:15px!important;font-weight:600!important}
+html body .panel[data-section] .panel-head:not(#z){display:flex;flex-wrap:wrap;align-items:center;align-content:center;gap:3px 8px;min-height:66px;box-sizing:border-box;padding-top:8px!important;padding-bottom:8px!important}
+html body .panel[data-section] .panel-head:not(#z) .total{flex:none;margin-left:auto;color:#1c1f1d!important;background:#f3f3ef!important;border-radius:999px!important;padding:3px 10px!important;font-family:'Lato','Calibri','Segoe UI',system-ui,sans-serif!important;font-size:15px!important;font-weight:600!important}
 
 /* ---- account names: plain dark text with a small colour dot (no coloured blocks) ---- */
 html body .panel[data-section="account"] table.ledger tbody tr td.num:not(#z){background:#fafaf8!important;color:#9a9f9b!important;font-weight:500!important;font-size:13px!important;border-right:1px solid #ecece7!important;border-bottom-color:#f0f0ec!important}
