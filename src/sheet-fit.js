@@ -79,6 +79,23 @@
   }
   document.addEventListener('input', soon, true);
   document.addEventListener('change', soon, true);
+  // The mouse wheel scrolls the whole page, even with the cursor over the Add / Shopon / Modina / Cost boxes.
+  // Alt + wheel scrolls inside a box; typing, arrow keys and touch still move inside it as before.
+  addEventListener('wheel', function (e) {
+    if (e.altKey || e.ctrlKey || !e.deltaY || !e.target.closest) return;
+    var box = e.target.closest('.ledger-scroll');
+    if (!box) return;
+    e.preventDefault();
+    var k = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? innerHeight : 1;
+    (document.scrollingElement || document.documentElement).scrollBy(0, e.deltaY * k);
+  }, { passive: false });
+  addEventListener('wheel', function (e) {
+    if (!e.altKey || !e.target.closest) return;
+    var box = e.target.closest('.ledger-scroll');
+    if (!box) return;
+    e.preventDefault();
+    box.scrollTop += (e.deltaY || e.deltaX) * (e.deltaMode === 1 ? 40 : 1);
+  }, { passive: false });
   addEventListener('resize', soon);
   addEventListener('load', function () {
     ['loadForDate', 'applyState', 'recalc'].forEach(wrap);
