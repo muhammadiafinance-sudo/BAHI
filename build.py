@@ -87,6 +87,10 @@ _sheet_js = open(os.path.join(HERE, 'src', 'sheet-fit.js'), encoding='utf-8').re
 def _js_str(x):
     return json.dumps(x)[1:-1].replace('</', '<\\/')
 hisab_js = hisab_js.replace(_mark, '<head><style id=\\"sheetText\\">' + _js_str(_sheet_css) + '</style><script id=\\"sheetFit\\">' + _js_str(_sheet_js) + '<\\/script><script>/* HISAB-CLOUD-BRIDGE')
+# Daily Hisab code edits (src/daily_patches.py): Add scrolls exactly like Shopon and Modina
+sys.path.insert(0, os.path.join(HERE, 'src'))
+from daily_patches import patch_hisab_js
+hisab_js = patch_hisab_js(hisab_js, lambda m: sys.exit('build: ' + m))
 hisab_js = hisab_js.replace("if(id==='daily'){openDailyCash();cashTab('hisab');return}",
                             "if(id==='daily'){initFrame(id);return}")
 
