@@ -23,7 +23,8 @@ EDITS = [
     ("    const minRows = sec.key === 'add' ? 20 : sec.scrollRows;   // Add always holds 20 rows inside its scroll block\n",
      "    const minRows = sec.scrollRows;\n"),
     # ...but the Add box is only as tall as the room left above Commission, so Commission's bottom lines up
-    # exactly with the bottom of Modina (and the other columns). Applies when Add and Modina share a row.
+    # exactly with the bottom of Modina (and the other columns), and Add shows as many rows as fit there:
+    # no scrolling until those are filled. Applies when Add and Modina share a row.
     ("""    wrap.style.maxHeight = (scrolling && rowH) ? (rowH * sec.scrollRows) + 'px' : '';
   });""",
      """    wrap.style.maxHeight = (scrolling && rowH) ? (rowH * sec.scrollRows) + 'px' : '';
@@ -33,7 +34,15 @@ EDITS = [
         const gap = parseFloat(getComputedStyle(panel.parentElement).rowGap) || 0;
         const below = panel.getBoundingClientRect().bottom - wrap.getBoundingClientRect().bottom;
         const room = Math.floor(mp.getBoundingClientRect().bottom - gap - cp.offsetHeight - below - wrap.getBoundingClientRect().top);
-        if(room > 60){ wrap.style.maxHeight = room + 'px'; wrap.classList.toggle('scrolling', wrap.scrollHeight > room + 1); }
+        const rh = trs[0].offsetHeight;
+        if(room > 60 && rh > 0){
+          // like Modina: fill the box first; only past the rows that fit do more rows (and scrolling) appear
+          const fitRows = Math.max(1, Math.floor(room / rh));
+          const shown = Math.max(fitRows, Math.min(sec.count, last + 1));
+          trs.forEach((tr,i)=> tr.classList.toggle('row-hidden', i >= shown));
+          wrap.style.maxHeight = room + 'px';
+          wrap.classList.toggle('scrolling', shown > fitRows);
+        }
       }
     }
   });"""),
