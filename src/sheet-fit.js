@@ -28,7 +28,7 @@
       var row = tb.rows[0], need = 0;
       if (row) for (var c = 0; c < row.cells.length; c++) {
         var td = row.cells[c];
-        need += td.querySelector('.amount-input') ? Math.max(a, 84) : td.classList.contains('note-cell') ? Math.max(n, 90) : td.classList.contains('num') ? 24 : 90;
+        need += td.querySelector('.amount-input') ? Math.max(a, 84) : td.classList.contains('note-cell') ? Math.max(n, 90) : td.classList.contains('num') ? 0 : 90;
       }
       tb.style.minWidth = need ? need + 'px' : '';
     }
