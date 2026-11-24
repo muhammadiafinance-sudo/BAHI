@@ -233,7 +233,22 @@ if ('serviceWorker' in navigator) {
   }
 
   window.nlReplay = animateView;
+  // colour-graded fills for every chart (bars run from a rich top to a soft base)
+  function addGradients() {
+    if (document.getElementById('nlGrad')) return;
+    var G = { Dep: ['#4f9f78', '#1f4a37'], Wd: ['#f6c08f', '#e08a4c'], Profit: ['#5aa47c', '#1f4a37'], Com: ['#e6f39b', '#b7d548'],
+      Total: ['#b5d0ea', '#5f8fc0'], Extra: ['#6cc3a8', '#1f7a62'], Neg: ['#f5b3a5', '#d0624e'] };
+    var d = '';
+    for (var k in G) d += '<linearGradient id="nlg' + k + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + G[k][1] + '"/><stop offset="1" stop-color="' + G[k][0] + '" stop-opacity=".85"/></linearGradient>';
+    d += '<linearGradient id="nlgArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b7d548" stop-opacity=".45"/><stop offset="1" stop-color="#b7d548" stop-opacity="0"/></linearGradient>';
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'nlGrad'; svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+    svg.innerHTML = '<defs>' + d + '</defs>';
+    document.body.appendChild(svg);
+  }
   function init() {
+    addGradients();
     var app = document.getElementById('bankApp'), shop = document.getElementById('shopApp');
     if (reduce || !window.MutationObserver) return;
     var queue = [], raf = 0;

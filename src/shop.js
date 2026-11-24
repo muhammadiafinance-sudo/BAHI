@@ -75,10 +75,10 @@
     return '<span class="sp-chip ' + cls + '">' + (up ? '▲ ' : '▼ ') + cmp(Math.abs(df)) + '</span><span class="sp-mut">vs ' + dm(pd) + '</span>';
   }
   var METRICS = {
-    total: { n: 'Total', c: '#8fb3d3', sub: 'Accounts + cash count' },
-    profit: { n: 'Profit', c: 'var(--nl-dep)', sub: 'Total + Shopon + Modina + cost − Add' },
-    com: { n: 'Commission', c: 'var(--nl-lime2)', sub: 'Typed in the Commission column' },
-    extra: { n: 'Extra', c: '#2d6b4f', sub: 'Profit − Commission' }
+    total: { n: 'Total', c: '#5f8fc0', f: 'url(#nlgTotal)', sub: 'Accounts + cash count' },
+    profit: { n: 'Profit', c: '#2d6b4f', f: 'url(#nlgProfit)', sub: 'Total + Shopon + Modina + cost − Add' },
+    com: { n: 'Commission', c: '#b7d548', f: 'url(#nlgCom)', sub: 'Typed in the Commission column' },
+    extra: { n: 'Extra', c: '#1f7a62', f: 'url(#nlgExtra)', sub: 'Profit − Commission' }
   };
   function money0(v) { return (v < 0 ? '-' : '') + '৳' + Math.abs(v).toLocaleString('en-IN', { maximumFractionDigits: 0 }); }
   function kpi(k, c, p, pd) {
@@ -103,7 +103,7 @@
     g('spChartTitle').innerHTML = '<i style="background:' + m.c + '"></i>' + m.n;
     g('spChartSub').textContent = n ? 'Last ' + S.range + ' days · total ' + money0(sum) + ' · average ' + money0(sum / n) + ' a day' : 'Last ' + S.range + ' days';
     var W = Math.max(520, (g('spChart').clientWidth || 700) * 1.2);
-    g('spChart').innerHTML = barChart(win, d, W, 280, [{ k: S.metric, c: m.c, n: m.n }], false);
+    g('spChart').innerHTML = barChart(win, d, W, 280, [{ k: S.metric, c: m.f, n: m.n }], false);
     renderPartners();
   }
   window.shopMetric = function (k) { if (METRICS[k]) { S.metric = k; try { localStorage.setItem('mh_shop_metric', k); } catch (e) {} render(); } };
@@ -119,7 +119,7 @@
       else series.forEach(function (o) { mx = Math.max(mx, x.row.c[o.k]); mn = Math.min(mn, x.row.c[o.k]); });
     });
     var top = niceTop(mx), bot = mn < 0 ? -niceTop(-mn) : 0, rng = top - bot || 1, Y = function (v) { return T + ih * (top - v) / rng; };
-    var gw = iw / n, bw = stacked ? Math.max(5, Math.min(30, gw * 0.5)) : Math.max(4, Math.min(22, gw * 0.3));
+    var gw = iw / n, bw = stacked ? Math.max(5, Math.min(30, gw * 0.5)) : Math.max(6, Math.min(34, gw * (series.length > 1 ? 0.3 : 0.56)));
     var s = '<svg class="ch" viewBox="0 0 ' + W.toFixed(0) + ' ' + H + '" role="img">';
     for (var i = 0; i <= 4; i++) { var v = bot + rng * i / 4, y = Y(v); s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" stroke="' + (Math.abs(v) < 1e-9 ? '#dcdcd6' : '#efefeb') + '"/><text x="' + (L - 8) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end">' + cmp(v) + '</text>'; }
     var step = Math.max(1, Math.ceil(n / Math.floor(iw / 56)));
@@ -139,7 +139,7 @@
           series.forEach(function (o, j) {
             var v = x.row.c[o.k], xx = cx - (series.length * bw + (series.length - 1) * 3) / 2 + j * (bw + 3);
             if (v >= 0) s += '<path d="' + bar(xx, Y(v), bw, Y(0) - Y(v), 4) + '" fill="' + o.c + '"/>';
-            else s += '<path d="M' + xx + ' ' + Y(0) + 'V' + Y(v) + 'H' + (xx + bw) + 'V' + Y(0) + 'Z" fill="#e58e7f"/>';
+            else s += '<path d="M' + xx + ' ' + Y(0) + 'V' + Y(v) + 'H' + (xx + bw) + 'V' + Y(0) + 'Z" fill="url(#nlgNeg)"/>';
           });
         }
       }

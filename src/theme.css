@@ -199,8 +199,8 @@ html body #loginScreen .nl-links button:disabled{color:var(--nl-faint)!important
 #bankApp .bkp .sub{color:var(--nl-faint)}
 #bankApp .bklg{color:var(--nl-muted)!important;font-weight:500!important}
 #bankApp .bklg i{border-radius:50%!important;width:8px!important;height:8px!important}
-#bankApp .bklg i[style*="#0f7b55"]{background:var(--nl-dep)!important}
-#bankApp .bklg i[style*="#d9531e"]{background:var(--nl-wd)!important}
+#bankApp .bklg i[style*="#0f7b55"]{background:linear-gradient(#1f4a37,#4f9f78)!important}
+#bankApp .bklg i[style*="#d9531e"]{background:linear-gradient(#e08a4c,#f6c08f)!important}
 #bankApp .bkrng{background:#f3f3ef;border-radius:9px;padding:3px;gap:2px}
 #bankApp .bkrng button{background:transparent;color:var(--nl-muted);border-radius:7px;font-weight:500;height:24px;transition:background-color .2s,color .2s}
 #bankApp .bkrng button.on{background:#fff;color:var(--nl-ink);box-shadow:0 1px 2px rgba(28,31,29,.1)}
@@ -216,8 +216,8 @@ html body #loginScreen .nl-links button:disabled{color:var(--nl-faint)!important
 #bankApp svg.ch line[stroke="#eaeef4"]{stroke:#efefeb}
 #bankApp svg.ch line[stroke="#cfd8e3"]{stroke:#dcdcd6}
 #bankApp svg.ch text{fill:var(--nl-faint)}
-#bankApp svg.ch path[fill="#0f7b55"]{fill:var(--nl-dep)}
-#bankApp svg.ch path[fill="#d9531e"]{fill:var(--nl-wd)}
+#bankApp svg.ch path[fill="#0f7b55"]{fill:url(#nlgDep)}
+#bankApp svg.ch path[fill="#d9531e"]{fill:url(#nlgWd)}
 #bankApp svg.ch rect[fill="#0a2f6b"]{fill:var(--nl-ink)}
 #bankApp svg.ch rect[fill="#f9ece8"]{fill:#f7f1e6}
 #bankApp svg.ch path[stroke="#0a2f6b"]{stroke:var(--bk-navy)}
@@ -471,3 +471,14 @@ html body #loginScreen .nl-pw input{font-size:18px}
   #shopApp .sp-today{margin-right:0}
   #shopApp #spOpenBtn{flex-basis:100%}
 }
+
+/* ---------- chart style: colour-graded bars, quiet dashed grid (bank + shop) ---------- */
+#bankApp svg.ch line,#shopApp svg.ch line{stroke:#ecece7;stroke-dasharray:3 5}
+#bankApp svg.ch line[stroke="#cfd8e3"],#shopApp svg.ch line[stroke="#dcdcd6"]{stroke:#d6d6d0;stroke-dasharray:none}
+#bankApp svg.ch path[fill="url(#bkcg)"]{fill:url(#nlgArea)}
+#bankApp svg.ch path[stroke="#0a2f6b"]{stroke:#1f4a37;stroke-width:2.6}
+#bankApp svg.ch circle[stroke="#0a2f6b"]{stroke:#1f4a37}
+#bankApp svg.ch circle[fill="#0a2f6b"]{fill:#b7d548}
+#bankApp svg.ch path[stroke="#b7791f"]{stroke:#c9a227;stroke-dasharray:4 4}
+#bankApp svg.ch text,#shopApp svg.ch text{font-size:11.5px}
+#bankApp svg.ch .bkhit:hover,#shopApp svg.ch .bkhit:hover{fill:#1f4a37;fill-opacity:.05}
