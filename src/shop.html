@@ -7,13 +7,14 @@
     </div>
     <nav class="sp-nav">
       <div class="sp-group">Overview</div>
-      <button type="button" class="sp-item on" data-sp="dash" onclick="shopGo('dash')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
+      <button type="button" class="sp-item on" data-sp="dash" title="Dashboard" onclick="shopGo('dash')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
       <div class="sp-group">Hisab</div>
-      <button type="button" class="sp-item" data-sp="daily" onclick="shopGo('daily')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11M9 8h6"/></svg><span>Daily Hisab</span></button>
+      <button type="button" class="sp-item" data-sp="daily" title="Daily Hisab" onclick="shopGo('daily')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11M9 8h6"/></svg><span>Daily Hisab</span></button>
       <div class="sp-group">Partners</div>
-      <button type="button" class="sp-item" data-sp="shopon" onclick="shopGo('shopon')"><span class="sp-av">S</span><span class="sp-pn">Shopon<small id="spBalShopon">&nbsp;</small></span></button>
-      <button type="button" class="sp-item" data-sp="modina" onclick="shopGo('modina')"><span class="sp-av">M</span><span class="sp-pn">Modina<small id="spBalModina">&nbsp;</small></span></button>
+      <button type="button" class="sp-item" data-sp="shopon" title="Shopon" onclick="shopGo('shopon')"><span class="sp-av">S</span><span class="sp-pn">Shopon<small id="spBalShopon">&nbsp;</small></span></button>
+      <button type="button" class="sp-item" data-sp="modina" title="Modina" onclick="shopGo('modina')"><span class="sp-av">M</span><span class="sp-pn">Modina<small id="spBalModina">&nbsp;</small></span></button>
     </nav>
+    <button type="button" class="sp-tog" onclick="shopMini()" aria-label="Expand or minimise the sidebar" title="Expand / minimise"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg><span>Minimise</span></button>
     <div class="sp-foot">
       <span class="sp-user"><span class="sp-uav">SH</span>Shop</span>
       <button type="button" class="sp-out" onclick="doLogout()" title="Log out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 8l4 4-4 4M20 12H9"/></svg><span>Log out</span></button>
@@ -35,51 +36,25 @@
 
     <div class="sp-view" id="spViewDash">
       <div class="sp-dash">
-        <div class="sp-greet" id="spGreet"></div>
         <div class="sp-ctl">
-          <div class="sp-datebox">
-            <button type="button" class="sp-btn sp-step" onclick="shopStep(-1)" aria-label="Previous day">‹</button><input type="date" id="spDate" aria-label="Date" onchange="shopPick(this.value)"><button type="button" class="sp-btn sp-step" onclick="shopStep(1)" aria-label="Next day">›</button>
-            <button type="button" class="sp-btn" onclick="shopPick(shopToday())">Today</button>
-          </div>
-          <span class="sp-info" id="spAsOf">Loading…</span>
-          <button type="button" class="sp-btn pri" onclick="shopOpenDay()">Open this day's hisab</button>
+          <button type="button" class="sp-btn sp-step" onclick="shopStep(-1)" aria-label="Previous saved day" title="Previous saved day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <label class="sp-day"><span id="spDayName">Today</span><input type="date" id="spDate" aria-label="Pick a date" onchange="shopPick(this.value)"></label>
+          <button type="button" class="sp-btn sp-step" onclick="shopStep(1)" aria-label="Next saved day" title="Next saved day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button type="button" class="sp-btn sp-today" onclick="shopPick(shopToday())">Today</button>
+          <button type="button" class="sp-btn pri" id="spOpenBtn" onclick="shopOpenDay()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 8h6"/></svg><span>Open hisab</span></button>
         </div>
 
-        <div class="sp-sec"><span>Selected day</span><em id="spDayLbl"></em></div>
         <div class="sp-kpis" id="spKpis"></div>
 
-        <div class="sp-grid2">
-          <div class="sp-card sp-wide-l">
-            <div class="sp-h"><h3>Profit &amp; commission</h3>
-              <span class="sp-lg"><span><i style="background:var(--nl-dep)"></i>Profit</span><span><i style="background:var(--nl-lime2)"></i>Commission</span></span>
-              <span class="sp-rng" id="spRng"><button type="button" data-n="7" onclick="shopRange(7)">7D</button><button type="button" data-n="14" onclick="shopRange(14)">14D</button><button type="button" data-n="30" onclick="shopRange(30)">30D</button></span>
-            </div>
-            <p class="sp-p">Per day from the Daily Hisab · tap a day to select it</p>
-            <div id="spChartPC"></div>
-          </div>
-          <div class="sp-card">
-            <div class="sp-h"><h3>Partners</h3></div>
-            <p class="sp-p">Balance from the Shopon and Modina hisab</p>
-            <div id="spPartners"></div>
-          </div>
-        </div>
-
         <div class="sp-card">
-          <div class="sp-h"><h3>Shopon, Modina &amp; daily cost</h3>
-            <span class="sp-lg"><span><i style="background:#2d6b4f"></i>Shopon</span><span><i style="background:#8fb3d3"></i>Modina</span><span><i style="background:#e9a36b"></i>Daily cost</span></span>
+          <div class="sp-h"><h3 id="spChartTitle">Profit</h3>
+            <span class="sp-rng" id="spRng"><button type="button" data-n="7" onclick="shopRange(7)">7D</button><button type="button" data-n="14" onclick="shopRange(14)">14D</button><button type="button" data-n="30" onclick="shopRange(30)">30D</button></span>
           </div>
-          <p class="sp-p">Stacked per day, as typed in the Daily Hisab</p>
-          <div id="spChartSM"></div>
+          <p class="sp-p" id="spChartSub">Tap a card above to change the chart · tap a bar to pick that day</p>
+          <div id="spChart"></div>
         </div>
 
-        <div class="sp-sec"><span>This month</span><em id="spMonLbl"></em></div>
-        <div class="sp-kpis" id="spKpisM"></div>
-
-        <div class="sp-card">
-          <div class="sp-h"><h3>Recent days</h3></div>
-          <p class="sp-p">Last 10 saved days · tap a row to open its hisab</p>
-          <div class="sp-tw"><table><thead><tr><th>Date</th><th class="n">Total</th><th class="n">Add</th><th class="n">Profit</th><th class="n">Commission</th><th class="n">Extra</th><th class="n">Daily cost</th></tr></thead><tbody id="spRecent"></tbody></table></div>
-        </div>
+        <div class="sp-partners" id="spPartners"></div>
       </div>
     </div>
 

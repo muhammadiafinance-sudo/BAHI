@@ -419,3 +419,55 @@ html body #loginScreen .nl-links button:disabled{color:var(--nl-faint)!important
 #bankApp .bkd-ctl input[type=date],#shopApp .sp-ctl input[type=date]{font-size:16px}
 html body #loginScreen .nl-pw input{font-size:18px}
 @media(max-width:640px){#bankApp table,#shopApp table{font-size:15.5px}}
+
+/* ---------- shop: slim sidebar rail + simpler interactive dashboard ---------- */
+#shopApp .sp-side{transition:width .26s var(--nl-ease)}
+#shopApp .sp-tog{display:flex;align-items:center;gap:11px;width:calc(100% - 20px);margin:0 10px 6px;padding:9px 11px;border:0;border-radius:9px;background:transparent;color:var(--nl-faint);font-size:13px;font-weight:500;cursor:pointer;box-shadow:none;text-align:left;flex:none}
+#shopApp .sp-tog:hover{background:rgba(28,31,29,.045);color:var(--nl-ink)}
+#shopApp .sp-tog svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .26s var(--nl-ease)}
+@media(min-width:861px){
+  #shopApp.sp-mini .sp-side{width:68px}
+  #shopApp.sp-mini .sp-brand{justify-content:center;padding-left:0;padding-right:0}
+  #shopApp.sp-mini .sp-bname,#shopApp.sp-mini .sp-item>span:not(.sp-av),#shopApp.sp-mini .sp-tog span,#shopApp.sp-mini .sp-out span,#shopApp.sp-mini .sp-user{display:none}
+  #shopApp.sp-mini .sp-nav{padding-left:10px;padding-right:10px}
+  #shopApp.sp-mini .sp-group{font-size:0;line-height:0;padding:0;margin:10px 8px;height:1px;background:var(--nl-line)}
+  #shopApp.sp-mini .sp-item{justify-content:center;padding:10px 0}
+  #shopApp.sp-mini .sp-tog{justify-content:center;padding:9px 0}
+  #shopApp.sp-mini .sp-tog svg{transform:rotate(180deg)}
+  #shopApp.sp-mini .sp-foot{padding:10px 10px 14px}
+  #shopApp.sp-mini .sp-out{padding:0}
+}
+@media(max-width:860px){#shopApp .sp-tog{display:none}}
+
+#shopApp .sp-dash{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+#shopApp .sp-ctl{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin:0 0 16px;padding:0;background:transparent;box-shadow:none;border-radius:0}
+#shopApp .sp-step{width:36px;padding:0}
+#shopApp .sp-step svg{width:17px;height:17px}
+#shopApp .sp-day{position:relative;display:inline-flex;align-items:center;height:36px;padding:0 14px;border:1px solid var(--nl-line);border-radius:9px;background:#fff;font-size:15px;font-weight:600;letter-spacing:-.2px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(28,31,29,.04)}
+#shopApp .sp-day:hover{background:#f6f6f3}
+#shopApp .sp-day input[type=date]{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;margin:0;cursor:pointer}
+#shopApp .sp-today{margin-right:auto}
+#shopApp .sp-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+#shopApp button.sp-kpi{display:flex;flex-direction:column;align-items:flex-start;text-align:left;width:100%;margin:0;border:0;cursor:pointer;font:inherit;color:inherit;transition:transform .2s var(--nl-ease),box-shadow .2s,background-color .2s}
+#shopApp button.sp-kpi:hover{transform:translate3d(0,-2px,0);box-shadow:0 8px 22px -14px rgba(28,31,29,.35),0 0 0 1px var(--nl-line) inset}
+#shopApp button.sp-kpi.on{background:#f4f8f1;box-shadow:0 0 0 2px var(--nl-acc) inset}
+#shopApp button.sp-kpi .v{max-width:100%}
+#shopApp button.sp-kpi.neg .v{color:#b5531f}
+#shopApp .sp-card{padding:18px 20px 12px}
+#shopApp .sp-h h3{display:flex;align-items:center;gap:9px}
+#shopApp .sp-h h3 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+#shopApp .sp-h .sp-rng{margin-left:auto}
+#shopApp .sp-partners{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#shopApp .sp-partners .sp-pc{margin:0;background:#fff;box-shadow:0 1px 2px rgba(28,31,29,.04)}
+#shopApp .sp-go{width:18px;height:18px;flex:none;fill:none;stroke:var(--nl-faint);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--nl-ease)}
+#shopApp .sp-pc:hover .sp-go{transform:translate3d(3px,0,0);stroke:var(--nl-ink)}
+#shopApp .sp-partners .sp-empty{grid-column:1/-1}
+@media(max-width:1000px){#shopApp .sp-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){
+  #shopApp .sp-dash{padding:14px 12px 32px}
+  #shopApp .sp-partners{grid-template-columns:1fr}
+  #shopApp .sp-ctl{flex-wrap:wrap}
+  #shopApp .sp-day{flex:1;justify-content:center;padding:0 8px;font-size:14px}
+  #shopApp .sp-today{margin-right:0}
+  #shopApp #spOpenBtn{flex-basis:100%}
+}

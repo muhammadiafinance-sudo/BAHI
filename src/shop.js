@@ -9,7 +9,8 @@
    ============================================================ */
 (function () {
   'use strict';
-  var S = { page: 'dash', days: [], byDate: {}, sel: null, range: 14, loading: false, started: false, smReady: false };
+  var S = { page: 'dash', days: [], byDate: {}, sel: null, range: 14, metric: 'profit', loading: false, started: false, smReady: false };
+  try { var _m = localStorage.getItem('mh_shop_metric'); if (_m) S.metric = _m; } catch (e) {}
   var TITLES = {
     dash: ['Dashboard', 'Daily hisab, Shopon and Modina at a glance'],
     daily: ['Daily Hisab', 'The shop sheet · saved to the cloud one day at a time'],
@@ -73,51 +74,39 @@
     var up = df > 0, cls = goodUp === null ? '' : (up === goodUp ? 'up' : 'down');
     return '<span class="sp-chip ' + cls + '">' + (up ? '▲ ' : '▼ ') + cmp(Math.abs(df)) + '</span><span class="sp-mut">vs ' + dm(pd) + '</span>';
   }
-  function kpi(cls, label, val, sub) {
-    return '<div class="sp-kpi ' + cls + '"><div class="k"><i></i>' + label + '</div><div class="v" title="' + esc(fmt(val)) + '">' + (val < 0 ? '-' : '') + '৳' + Math.abs(val).toLocaleString('en-IN', { maximumFractionDigits: 0 }) + '</div><div class="d">' + sub + '</div></div>';
+  var METRICS = {
+    total: { n: 'Total', c: '#8fb3d3', sub: 'Accounts + cash count' },
+    profit: { n: 'Profit', c: 'var(--nl-dep)', sub: 'Total + Shopon + Modina + cost − Add' },
+    com: { n: 'Commission', c: 'var(--nl-lime2)', sub: 'Typed in the Commission column' },
+    extra: { n: 'Extra', c: '#2d6b4f', sub: 'Profit − Commission' }
+  };
+  function money0(v) { return (v < 0 ? '-' : '') + '৳' + Math.abs(v).toLocaleString('en-IN', { maximumFractionDigits: 0 }); }
+  function kpi(k, c, p, pd) {
+    var m = METRICS[k], v = c ? c[k] : 0;
+    var lbl = k === 'profit' && c ? (v > 0 ? 'Profit' : v < 0 ? 'Loss' : 'Break-even') : m.n;
+    return '<button type="button" class="sp-kpi k-' + k + (S.metric === k ? ' on' : '') + (v < 0 ? ' neg' : '') + '" onclick="shopMetric(\'' + k + '\')" aria-pressed="' + (S.metric === k) + '">' +
+      '<span class="k"><i style="background:' + m.c + '"></i>' + lbl + '</span>' +
+      '<span class="v" title="' + esc(fmt(v)) + '">' + (c ? money0(v) : '—') + '</span>' +
+      '<span class="d">' + (c ? chip(v, p && p[k], true, pd) : '<span class="sp-mut">nothing saved</span>') + '</span></button>';
   }
   function render() {
     if (!g('spKpis')) return;
     var d = selDate(), row = S.byDate[d], pr = prevOf(d), c = row ? row.c : null, p = pr ? pr.c : null, pd = pr && pr.date;
     g('spDate').value = d;
-    g('spDayLbl').textContent = nice(d) + (d === today() ? ' · today' : '');
-    g('spAsOf').textContent = S.days.length ? S.days.length + ' saved days · last ' + nice(S.days[S.days.length - 1].date) : (S.loading ? 'Loading…' : 'No saved days yet');
-    if (!c) {
-      g('spKpis').innerHTML = '<div class="sp-empty">Nothing saved for ' + esc(nice(d)) + '. <button type="button" class="sp-link" onclick="shopOpenDay()">Open the Daily Hisab</button></div>';
-    } else {
-      g('spKpis').innerHTML =
-        kpi('k-tot', 'Total', c.total, chip(c.total, p && p.total, true, pd)) +
-        kpi(c.profit >= 0 ? 'k-in' : 'k-out', c.profit > 0 ? 'Profit' : c.profit < 0 ? 'Loss' : 'Break-even', c.profit, chip(c.profit, p && p.profit, true, pd)) +
-        kpi('k-com', 'Commission', c.com, chip(c.com, p && p.com, true, pd)) +
-        kpi(c.extra >= 0 ? 'k-in' : 'k-out', 'Extra', c.extra, chip(c.extra, p && p.extra, true, pd));
-    }
-    // month
-    var ym = d.slice(0, 7), m = { com: 0, profit: 0, cost: 0, sh: 0, mo: 0, n: 0 };
-    S.days.forEach(function (r) { if (r.date.slice(0, 7) === ym) { m.com += r.c.com; m.profit += r.c.profit; m.cost += r.c.cost; m.sh += r.c.sh; m.mo += r.c.mo; m.n++; } });
-    g('spMonLbl').textContent = monLabel(ym) + ' · ' + m.n + ' saved day' + (m.n === 1 ? '' : 's');
-    g('spKpisM').innerHTML =
-      kpi('k-com', 'Commission', m.com, '<span class="sp-mut">avg ৳' + cmp(m.n ? m.com / m.n : 0) + ' / day</span>') +
-      kpi(m.profit >= 0 ? 'k-in' : 'k-out', 'Profit', m.profit, '<span class="sp-mut">all saved days</span>') +
-      kpi('k-out', 'Daily cost', m.cost, '<span class="sp-mut">avg ৳' + cmp(m.n ? m.cost / m.n : 0) + ' / day</span>') +
-      kpi('k-tot', 'Shopon + Modina', m.sh + m.mo, '<span class="sp-mut">Shopon ৳' + cmp(m.sh) + ' · Modina ৳' + cmp(m.mo) + '</span>');
-    // charts
-    var win = []; for (var i = S.range - 1; i >= 0; i--) { var dd = addDays(d, -i); win.push({ date: dd, row: S.byDate[dd] }); }
+    g('spDayName').textContent = (d === today() ? 'Today · ' : '') + nice(d);
+    g('spKpis').innerHTML = ['total', 'profit', 'com', 'extra'].map(function (k) { return kpi(k, c, p, pd); }).join('');
+    g('spOpenBtn').hidden = false;
+    // one chart, for the figure picked above
+    var m = METRICS[S.metric], win = [], i, sum = 0, n = 0;
+    for (i = S.range - 1; i >= 0; i--) { var dd = addDays(d, -i), r = S.byDate[dd]; win.push({ date: dd, row: r }); if (r) { sum += r.c[S.metric]; n++; } }
     [].forEach.call(document.querySelectorAll('#spRng button'), function (b) { b.classList.toggle('on', +b.getAttribute('data-n') === S.range); });
-    var W = Math.max(560, (g('spChartPC').clientWidth || 700) * 1.25);
-    g('spChartPC').innerHTML = barChart(win, d, W, 300, [
-      { k: 'profit', c: 'var(--nl-dep)', n: 'Profit' }, { k: 'com', c: 'var(--nl-lime2)', n: 'Commission' }], false);
-    g('spChartSM').innerHTML = barChart(win, d, Math.max(560, (g('spChartSM').clientWidth || 900) * 1.25), 260, [
-      { k: 'sh', c: '#2d6b4f', n: 'Shopon' }, { k: 'mo', c: '#8fb3d3', n: 'Modina' }, { k: 'cost', c: '#e9a36b', n: 'Daily cost' }], true);
-    // recent
-    var rec = S.days.slice(-10).reverse();
-    g('spRecent').innerHTML = rec.length ? rec.map(function (r) {
-      var c2 = r.c;
-      return '<tr class="click' + (r.date === d ? ' on' : '') + '" onclick="shopOpenDay(\'' + r.date + '\')"><td>' + esc(nice(r.date)) + '</td><td class="n">' + fmt(c2.total) + '</td><td class="n">' + fmt(c2.add) + '</td><td class="n ' + (c2.profit < 0 ? 'neg' : 'pos') + '">' + fmt(c2.profit) + '</td><td class="n">' + fmt(c2.com) + '</td><td class="n ' + (c2.extra < 0 ? 'neg' : '') + '">' + fmt(c2.extra) + '</td><td class="n">' + fmt(c2.cost) + '</td></tr>';
-    }).join('') : '<tr><td colspan="7" class="sp-mut" style="text-align:center;padding:22px">No saved days yet</td></tr>';
+    g('spChartTitle').innerHTML = '<i style="background:' + m.c + '"></i>' + m.n;
+    g('spChartSub').textContent = n ? 'Last ' + S.range + ' days · total ' + money0(sum) + ' · average ' + money0(sum / n) + ' a day' : 'Last ' + S.range + ' days';
+    var W = Math.max(520, (g('spChart').clientWidth || 700) * 1.2);
+    g('spChart').innerHTML = barChart(win, d, W, 280, [{ k: S.metric, c: m.c, n: m.n }], false);
     renderPartners();
-    var h = new Date().getHours();
-    g('spGreet').textContent = (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening');
   }
+  window.shopMetric = function (k) { if (METRICS[k]) { S.metric = k; try { localStorage.setItem('mh_shop_metric', k); } catch (e) {} render(); } };
   function niceTop(v) { if (v <= 0) return 1000; var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
   function bar(x, y, w, h, r) { if (h <= 0) return ''; r = Math.min(r, w / 2, h); return 'M' + x + ' ' + (y + h) + 'V' + (y + r) + 'Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + 'H' + (x + w - r) + 'Q' + (x + w) + ' ' + y + ' ' + (x + w) + ' ' + (y + r) + 'V' + (y + h) + 'Z'; }
   function barChart(win, selD, W, H, series, stacked) {
@@ -185,7 +174,7 @@
     ['shopon', 'modina'].forEach(function (k) {
       var p = partnerName(k), t = a.totals(p) || { due: 0, sent: 0, bank: 0, cnt: 0 }, b = balTxt(t.due), ms = 0, mr = 0;
       ents.forEach(function (e) { if (e.partner === p && e.date.slice(0, 7) === ym) { if (e.type === 'send') ms += +e.amount; else mr += +e.amount; } });
-      html += '<button type="button" class="sp-pc" onclick="shopGo(\'' + k + '\')"><span class="sp-av big">' + (k === 'shopon' ? 'S' : 'M') + '</span><span class="sp-pcb"><b>' + (k === 'shopon' ? 'Shopon' : 'Modina') + '</b><small>This month: sent ৳' + cmp(ms) + ' · received ৳' + cmp(mr) + '</small></span><span class="sp-pcv ' + b.c + '"><b>' + b.t + '</b><small>' + b.w + '</small></span></button>';
+      html += '<button type="button" class="sp-pc" onclick="shopGo(\'' + k + '\')"><span class="sp-av big">' + (k === 'shopon' ? 'S' : 'M') + '</span><span class="sp-pcb"><b>' + (k === 'shopon' ? 'Shopon' : 'Modina') + '</b><small>' + b.w + ' · sent ৳' + cmp(ms) + ' this month</small></span><span class="sp-pcv ' + b.c + '"><b>' + b.t + '</b></span><svg class="sp-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>';
       var side = g(k === 'shopon' ? 'spBalShopon' : 'spBalModina'); if (side) { side.textContent = b.w + ' ' + b.t; side.className = b.c; }
     });
     box.innerHTML = html;
@@ -219,6 +208,17 @@
   };
 
   /* ---------- navigation ---------- */
+  // sidebar: a slim icon rail (default) or the full list; the choice is remembered
+  function applyMini(on) {
+    var a = g('shopApp'); if (!a) return;
+    a.classList.toggle('sp-mini', on);
+    var t = document.querySelector('#spSide .sp-tog span'); if (t) t.textContent = on ? 'Expand' : 'Minimise';
+  }
+  window.shopMini = function () {
+    var on = !g('shopApp').classList.contains('sp-mini');
+    applyMini(on); try { localStorage.setItem('mh_shop_mini', on ? '1' : '0'); } catch (e) {}
+    if (S.page === 'dash') setTimeout(render, 260);
+  };
   window.shopSide = function (open) { g('shopApp').classList.toggle('sp-open', !!open); };
   window.shopGo = function (page) {
     S.page = page;
@@ -265,8 +265,12 @@
       startSm();
       var st = dailyStore(); if (st && st.onChange) st.onChange(function () { if (S.page === 'dash') load(); });
       setInterval(function () { if (S.page === 'dash' && !document.hidden) load(); }, 60000);
+      var dl = g('spDate');
+      if (dl) dl.addEventListener('click', function () { try { dl.showPicker(); } catch (e) {} });
       addEventListener('resize', function () { if (S.page === 'dash') { clearTimeout(S.rt); S.rt = setTimeout(render, 200); } });
     }
+    var mini = '1'; try { mini = localStorage.getItem('mh_shop_mini') || '1'; } catch (e) {}
+    applyMini(mini === '1');
     var p = 'dash'; try { p = localStorage.getItem('mh_shop_page') || 'dash'; } catch (e) {}
     if (!TITLES[p]) p = 'dash';
     shopGo(p);
