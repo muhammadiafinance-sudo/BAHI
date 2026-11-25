@@ -1,0 +1,69 @@
+<!-- ===================== SHOP (Shop login: dashboard, Daily Hisab, Shopon, Modina) ===================== -->
+<div id="shopApp" aria-label="Shop">
+  <aside class="sp-side" id="spSide" aria-label="Shop navigation">
+    <div class="sp-brand">
+      <span class="sp-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M10 20v-5h4v5"/></svg></span>
+      <span class="sp-bname">Mohammadia<small>Shop</small></span>
+    </div>
+    <nav class="sp-nav">
+      <div class="sp-group">Overview</div>
+      <button type="button" class="sp-item on" data-sp="dash" title="Dashboard" onclick="shopGo('dash')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
+      <div class="sp-group">Hisab</div>
+      <button type="button" class="sp-item" data-sp="daily" title="Daily Hisab" onclick="shopGo('daily')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11M9 8h6"/></svg><span>Daily Hisab</span></button>
+      <div class="sp-group">Partners</div>
+      <button type="button" class="sp-item" data-sp="shopon" title="Shopon" onclick="shopGo('shopon')"><span class="sp-av">S</span><span class="sp-pn">Shopon<small id="spBalShopon">&nbsp;</small></span></button>
+      <button type="button" class="sp-item" data-sp="modina" title="Modina" onclick="shopGo('modina')"><span class="sp-av">M</span><span class="sp-pn">Modina<small id="spBalModina">&nbsp;</small></span></button>
+    </nav>
+    <button type="button" class="sp-tog" onclick="shopMini()" aria-label="Expand or minimise the sidebar" title="Expand / minimise"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg><span>Minimise</span></button>
+    <div class="sp-foot">
+      <span class="sp-user"><span class="sp-uav">SH</span>Shop</span>
+      <button type="button" class="sp-out" onclick="doLogout()" title="Log out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 8l4 4-4 4M20 12H9"/></svg><span>Log out</span></button>
+    </div>
+  </aside>
+  <div class="sp-scrim" onclick="shopSide(false)"></div>
+
+  <div class="sp-main">
+    <header class="sp-bar">
+      <button type="button" class="sp-burger" onclick="shopSide(true)" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <h1 id="spTitle">Dashboard</h1><span class="sp-sub" id="spSub">Daily hisab, Shopon and Modina at a glance</span>
+      <div class="sp-acts" id="spActsP" hidden>
+        <button type="button" class="sp-btn" onclick="shopSm('excel')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>Excel</span></button>
+        <button type="button" class="sp-btn" onclick="shopSm('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg><span>Settings &amp; backup</span></button>
+        <button type="button" class="sp-btn pri" onclick="shopSm('add')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New entry</span></button>
+      </div>
+      <span class="hisab-pill" id="hisabDailyPill" hidden>☁️ Connecting…</span>
+    </header>
+
+    <div class="sp-view" id="spViewDash">
+      <div class="sp-dash">
+        <div class="sp-ctl">
+          <button type="button" class="sp-btn sp-step" onclick="shopStep(-1)" aria-label="Previous saved day" title="Previous saved day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <label class="sp-day"><span id="spDayName">Today</span><input type="date" id="spDate" aria-label="Pick a date" onchange="shopPick(this.value)"></label>
+          <button type="button" class="sp-btn sp-step" onclick="shopStep(1)" aria-label="Next saved day" title="Next saved day"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button type="button" class="sp-btn sp-today" onclick="shopPick(shopToday())">Today</button>
+          <button type="button" class="sp-btn pri" id="spOpenBtn" onclick="shopOpenDay()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 8h6"/></svg><span>Open hisab</span></button>
+        </div>
+
+        <div class="sp-kpis" id="spKpis"></div>
+
+        <div class="sp-card">
+          <div class="sp-h"><h3 id="spChartTitle">Profit</h3>
+            <span class="sp-rng" id="spRng"><button type="button" data-n="7" onclick="shopRange(7)">7D</button><button type="button" data-n="14" onclick="shopRange(14)">14D</button><button type="button" data-n="30" onclick="shopRange(30)">30D</button></span>
+          </div>
+          <p class="sp-p" id="spChartSub">Tap a card above to change the chart · tap a bar to pick that day</p>
+          <div id="spChart"></div>
+        </div>
+
+        <div class="sp-partners" id="spPartners"></div>
+      </div>
+    </div>
+
+    <div class="sp-view sp-full" id="spViewDaily" hidden>
+      <div class="sh-body hisab-wrap"><iframe class="hisab-frame" id="hisabDailyFrame" title="Daily Hisab"></iframe></div>
+    </div>
+    <div class="sp-view sp-full" id="spViewSm" hidden>
+      <iframe class="sp-smframe" id="smFrame" title="Shopon and Modina hisab"></iframe>
+    </div>
+  </div>
+</div>
+<div id="setupNotice" role="alert"></div>

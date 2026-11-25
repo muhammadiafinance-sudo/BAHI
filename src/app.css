@@ -1,0 +1,5 @@
+/* Shown when the app cannot start (config not filled in, or opened on the shop app's address) */
+#setupNotice{display:none;position:fixed;inset:0;z-index:100000;align-items:center;justify-content:center;padding:16px;background:#eef2f7;font-family:Arial,Helvetica,sans-serif}
+#setupNotice.show{display:flex}
+#setupNotice .box{max-width:520px;background:#fff;border:1px solid #dbe2ec;border-radius:12px;padding:24px;color:#0f172a;line-height:1.55}
+#setupNotice h2{margin:0 0 10px;font-size:19px;color:#a8321f}
