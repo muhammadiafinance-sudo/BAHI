@@ -96,6 +96,25 @@
     e.preventDefault();
     box.scrollTop += (e.deltaY || e.deltaX) * (e.deltaMode === 1 ? 40 : 1);
   }, { passive: false });
+  // DBBL top row: ‹ › change the day; ⋮ opens Save / Backup / Restore
+  function stepDay(n) {
+    var i = document.getElementById('hisabDate'); if (!i || !i.value || i.disabled) return;
+    var p = i.value.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2] + n);
+    i.value = new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+    i.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('#dayPrev,#dayNext,#menuBtn,.tb-item') : null;
+    var pop = document.getElementById('menuPop'), btn = document.getElementById('menuBtn');
+    if (t && t.id === 'dayPrev') return stepDay(-1);
+    if (t && t.id === 'dayNext') return stepDay(1);
+    if (t && t.id === 'menuBtn') { var open = pop.hidden; pop.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false'); return; }
+    if (pop && !pop.hidden && (!e.target.closest('#tbMenu') || (t && t.classList.contains('tb-item')))) { pop.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+  });
+  document.addEventListener('keydown', function (e) {
+    var pop = document.getElementById('menuPop');
+    if (e.key === 'Escape' && pop && !pop.hidden) { pop.hidden = true; document.getElementById('menuBtn').focus(); }
+  });
   addEventListener('resize', soon);
   addEventListener('load', function () {
     ['loadForDate', 'applyState', 'recalc'].forEach(wrap);

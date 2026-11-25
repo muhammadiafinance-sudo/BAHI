@@ -55,3 +55,56 @@ html body .pulse-item .pv{font-size:16.8px!important;font-weight:800!important}
 html body .out-card .k:not(#z){font-size:11.5px!important;font-weight:700!important;letter-spacing:.6px;text-transform:uppercase}
 html body .out-card .v:not(#z){font-size:20px!important;font-weight:800!important}
 html body #hisabDate{font-size:13px!important;font-weight:700!important}
+
+/* ===== DBBL Daily Hisab: one clean top row, ⋮ menu, columns that end on one line ===== */
+html body .dbbl .tb.pulse-bar{position:sticky;top:0;z-index:30;background:rgba(251,251,249,.97);-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid #ecece7}
+html body .dbbl .tb-inner{max-width:1680px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+html body .dbbl .tb-title{margin:0;font-size:17px;font-weight:700;letter-spacing:-.3px;white-space:nowrap;color:#1c1f1d}
+html body .dbbl .tb-date{display:inline-flex;align-items:center;gap:4px}
+html body .dbbl .tb-ic{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin:0;padding:0;border:1px solid #e4e4df;border-radius:8px;background:#fff;color:#1c1f1d;cursor:pointer;box-shadow:none;flex:none}
+html body .dbbl .tb-ic:hover{background:#f3f3ef}
+html body .dbbl .tb-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body .dbbl .tb-dots svg{fill:currentColor;stroke:none;width:18px;height:18px}
+html body .dbbl #hisabDate{height:32px;padding:0 8px;border:1px solid #e4e4df;border-radius:8px;background:#fff;font-size:13px!important;font-weight:700!important}
+html body .dbbl .tb-stats{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+html body .dbbl .tb-stats .pulse-item{gap:5px}
+html body .dbbl .tb-stats .pulse-item .pk{font-size:11px!important;color:#8a8f8b}
+html body .dbbl .tb-stats .pulse-item .pv{font-size:13.5px!important;font-weight:700!important}
+html body .dbbl .pulse-badge{margin-left:0;font-size:12px;padding:3px 10px}
+html body .dbbl .tb-gap{flex:1 1 0;min-width:0}
+html body .dbbl .save-status{font-size:12px}
+html body .dbbl .tb-cloud{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:#f3f3ef;color:#4a4f4b;white-space:nowrap}
+html body .dbbl .tb-cloud.ok{background:#e9f3e3;color:#2d6b4f}
+html body .dbbl .tb-cloud.warn{background:#fbf3d9;color:#7a5600}
+html body .dbbl .tb-cloud.bad{background:#fbece9;color:#a8321f}
+html body .dbbl button.act.tb-clear{padding:6px 12px;font-size:13px;border-radius:8px}
+html body .dbbl .tb-menu{position:relative;flex:none}
+html body .dbbl .tb-pop{position:absolute;right:0;top:40px;z-index:40;min-width:220px;padding:6px;background:#fff;border:1px solid #e4e4df;border-radius:12px;box-shadow:0 14px 40px rgba(28,31,29,.18);display:flex;flex-direction:column;gap:2px;animation:tbPop .16s ease-out}
+html body .dbbl .tb-pop[hidden]{display:none}
+@keyframes tbPop{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+html body .dbbl button.act.tb-item{display:flex;align-items:center;gap:10px;width:100%;margin:0;padding:9px 10px;border:0;border-radius:8px;background:transparent;color:#1c1f1d;font-size:14px;font-weight:500;text-align:left;box-shadow:none;transform:none}
+html body .dbbl button.act.tb-item:hover{background:#f3f3ef;box-shadow:none}
+html body .dbbl button.act.tb-item svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html body .dbbl .topgrid{margin:14px 0 14px;gap:12px}
+html body .dbbl .single-box{padding:10px 14px}
+@media (max-width:640px){html body .dbbl .tb-inner{padding:8px 10px;gap:8px 10px}html body .dbbl .tb-title{font-size:15px;width:100%}html body .dbbl .tb-gap{display:none}}
+@media (min-width:761px){
+  html body .dbbl .ledger-grid{align-items:stretch}
+  html body .dbbl .ledger-grid > .col{display:flex;flex-direction:column}
+  html body .dbbl .ledger-grid > .col > .panel:last-child{flex:1 1 auto}
+  html body .dbbl .ledger-grid > .col[data-col="dp"]{contain:size;min-height:0}
+  html body .dbbl #pinPanel{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+  html body .dbbl .pin-scroll{flex:1 1 0;min-height:0;overflow-y:auto}
+  html body .dbbl .pin-tbl thead th{position:sticky;top:0;z-index:1;background:#fafaf8}
+}
+html body .pin-tbl thead th:first-child{display:none}
+html body .pin-tbl td.pn{width:30%}
+@media (min-width:761px){
+  html body .dbbl .tb-inner{flex-wrap:nowrap;gap:12px}
+  html body .dbbl .tb-stats{flex-wrap:nowrap;gap:12px;min-width:0}
+  html body .dbbl .tb-stats .pulse-item{white-space:nowrap}
+  html body .dbbl .tb-cloud{min-width:0;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+  html body .dbbl .save-status{min-width:0;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media (max-width:1100px) and (min-width:761px){html body .dbbl .tb-stats .pulse-item .pk{display:none}html body .dbbl .tb-stats .pulse-item:nth-child(1) .pv::before{content:"Comm ";font-size:11px;font-weight:400;color:#8a8f8b}html body .dbbl .tb-stats .pulse-item:nth-child(2) .pv::before{content:"Exp ";font-size:11px;font-weight:400;color:#8a8f8b}html body .dbbl .tb-stats .pulse-item:nth-child(3) .pv::before{content:"Cnt ";font-size:11px;font-weight:400;color:#8a8f8b}}
+@media (max-width:600px){html body .dbbl .tb-title{display:none}}

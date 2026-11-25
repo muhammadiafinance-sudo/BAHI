@@ -90,7 +90,10 @@ hisab_js = hisab_js.replace(_mark, '<head><style id=\\"sheetText\\">' + _js_str(
 # Daily Hisab code edits (src/daily_patches.py): Add scrolls exactly like Shopon and Modina
 sys.path.insert(0, os.path.join(HERE, 'src'))
 from daily_patches import patch_hisab_js
+import dbbl_patches
 hisab_js = patch_hisab_js(hisab_js, lambda m: sys.exit('build: ' + m))
+# DBBL Daily Hisab edits (src/dbbl_patches.py): one clean top row with a ⋮ menu, Pin in its own scroll box
+hisab_js = dbbl_patches.patch_hisab_js(hisab_js, lambda m: sys.exit('build: ' + m))
 hisab_js = hisab_js.replace("if(id==='daily'){openDailyCash();cashTab('hisab');return}",
                             "if(id==='daily'){initFrame(id);return}")
 

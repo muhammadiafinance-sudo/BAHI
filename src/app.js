@@ -175,6 +175,27 @@ async function startHisabApp() {
   $('loginPassword').focus();
 }
 
+/* Bank: on the DBBL Daily Hisab page the sheet's own top row is the only top bar;
+   the cloud sync status is shown inside that row. */
+document.addEventListener('DOMContentLoaded', function () {
+  var app = document.getElementById('bankApp'); if (!app) return;
+  function sync() { var v = document.getElementById('bkViewHisab'); app.classList.toggle('bk-on-hisab', !!v && v.style.display !== 'none'); copyPill(); }
+  function copyPill() {
+    var pill = document.getElementById('hisabDbblPill'), f = document.getElementById('hisabDbblFrame');
+    var c = null; try { c = f && f.contentDocument && f.contentDocument.getElementById('cloudPill'); } catch (e) {}
+    if (!pill || !c) return;
+    c.textContent = pill.textContent; c.className = 'tb-cloud ' + pill.className.replace('hisab-pill', '').trim(); c.hidden = !pill.textContent;
+  }
+  ['bankTab', 'showBankApp'].forEach(function (n) {
+    var o = window[n]; if (typeof o !== 'function') return;
+    window[n] = function () { var r = o.apply(this, arguments); sync(); return r; };
+  });
+  var pill = document.getElementById('hisabDbblPill');
+  if (pill && window.MutationObserver) new MutationObserver(copyPill).observe(pill, { childList: true, characterData: true, subtree: true, attributes: true });
+  var f = document.getElementById('hisabDbblFrame'); if (f) f.addEventListener('load', function () { setTimeout(copyPill, 50); });
+  setInterval(copyPill, 3000);
+});
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 }

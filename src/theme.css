@@ -482,3 +482,7 @@ html body #loginScreen .nl-pw input{font-size:18px}
 #bankApp svg.ch path[stroke="#b7791f"]{stroke:#c9a227;stroke-dasharray:4 4}
 #bankApp svg.ch text,#shopApp svg.ch text{font-size:11.5px}
 #bankApp svg.ch .bkhit:hover,#shopApp svg.ch .bkhit:hover{fill:#1f4a37;fill-opacity:.05}
+
+/* bank: the DBBL sheet's own row is the top bar on that page */
+#bankApp.bk-on-hisab .bk-hisab .hisab-bar{display:none}
+@media(min-width:861px){#bankApp.bk-on-hisab .bkbar{display:none}}
